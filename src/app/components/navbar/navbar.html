@@ -38,71 +38,61 @@
 
       <!-- Notifications Bell -->
       <div class="notification-trigger">
-        <button
-          (click)="toggleNotifications()"
-          class="nav-icon-btn"
-          title="Notifications"
-          type="button"
-        >
+        <button (click)="toggleNotifications()" class="nav-icon-btn" title="Notifications" type="button">
           <i class="fas fa-bell"></i>
           @if (notificationService.unreadCount() > 0) {
-            <span class="notification-badge">{{ notificationService.unreadCount() }}</span>
+          <span class="notification-badge">{{ notificationService.unreadCount() }}</span>
           }
         </button>
 
         <!-- Notification Dropdown Panel -->
         @if (notificationService.showNotificationPanel()) {
-          <div class="notification-dropdown-overlay" (click)="closeNotifications()"></div>
-          <div class="notification-dropdown">
-            <div class="notification-dropdown-header">
-              <h3>Notifications</h3>
-              <button (click)="closeNotifications()" class="close-btn" type="button">
-                <i class="fas fa-times"></i>
-              </button>
-            </div>
-
-            <div class="notification-dropdown-list">
-              @if (notificationService.getNotifications().length === 0) {
-                <div class="empty-notification">
-                  <p>Aucune notification</p>
-                </div>
-              } @else {
-                @for (notification of notificationService.getNotifications().slice(0, 5); track notification.id) {
-                  <div class="dropdown-notification-item" [class.unread]="!notification.read">
-                    @if (notification.avatar) {
-                      <img [src]="notification.avatar" [alt]="notification.userName || 'Avatar'" />
-                    } @else {
-                      <div class="notification-icon-circle">
-                        <i class="fas fa-bell"></i>
-                      </div>
-                    }
-                    <div class="dropdown-notification-text">
-                      <p>{{ notification.title }}</p>
-                      <small>{{ notification.message }}</small>
-                    </div>
-                  </div>
-                }
-              }
-            </div>
-
-            <div class="notification-dropdown-footer">
-              <a routerLink="/notifications" (click)="closeNotifications()" class="view-all">
-                Voir toutes les notifications
-              </a>
-            </div>
+        <div class="notification-dropdown-overlay" (click)="closeNotifications()"></div>
+        <div class="notification-dropdown">
+          <div class="notification-dropdown-header">
+            <h3>Notifications</h3>
+            <button (click)="closeNotifications()" class="close-btn" type="button">
+              <i class="fas fa-times"></i>
+            </button>
           </div>
+
+          <div class="notification-dropdown-list">
+            @if (notificationService.getNotifications().length === 0) {
+            <div class="empty-notification">
+              <p>Aucune notification</p>
+            </div>
+            } @else {
+            @for (notification of notificationService.getNotifications().slice(0, 5); track notification.id) {
+            <div class="dropdown-notification-item" [class.unread]="!notification.read">
+              @if (notification.avatar) {
+              <img [src]="notification.avatar" [alt]="notification.userName || 'Avatar'" />
+              } @else {
+              <div class="notification-icon-circle">
+                <i class="fas fa-bell"></i>
+              </div>
+              }
+              <div class="dropdown-notification-text">
+                <p>{{ notification.title }}</p>
+                <small>{{ notification.message }}</small>
+              </div>
+            </div>
+            }
+            }
+          </div>
+
+          <div class="notification-dropdown-footer">
+            <a routerLink="/notifications" (click)="closeNotifications()" class="view-all">
+              Voir toutes les notifications
+            </a>
+          </div>
+        </div>
         }
       </div>
 
       <!-- Profile Button -->
-      <button
-        [routerLink]="['/profile', '1']"
-        routerLinkActive="active"
-        class="profile-btn"
-        type="button"
-        title="Profil utilisateur"
-      >
-        <img [src]="userAvatar" [alt]="userName" class="profile-avatar" />
+      <button [routerLink]="['/profile', '1']" routerLinkActive="active" class="profile-btn" type="button"
+        title="Profil utilisateur">
+        <span>{{ userName }}</span>
         <i class="fas fa-chevron-down"></i>
       </button>
 

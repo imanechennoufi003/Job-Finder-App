@@ -2,129 +2,100 @@
   <main class="instagram-feed">
     <!-- Stories/Profile Bar -->
     <div class="feed-header">
-      <div class="profile-mini">
-        <div class="avatar">{{ currentUser?.firstName?.charAt(0) }}</div>
-        <div class="profile-text">
-          <h4>{{ currentUser?.firstName }} {{ currentUser?.lastName }}</h4>
-          <p>{{ currentUser?.headline || 'Bienvenue!' }}</p>
-        </div>
+      <div class="profile-text">
+        <h4>{{ currentUser?.firstName }} {{ currentUser?.lastName }}</h4>
       </div>
     </div>
 
     <!-- Create Post Card -->
     <div class="create-post-card">
       <div class="create-post-inner">
-        <div class="avatar-small">{{ currentUser?.firstName?.charAt(0) }}</div>
-        <input type="text" placeholder="Partagez vos réflexions..." class="create-input" [(ngModel)]="newPostContent" (keyup.enter)="publishPost()" />
-        
+        <input type="text" placeholder="Share your thoughts..." class="create-input" [(ngModel)]="newPostContent"
+          (keyup.enter)="publishPost()" />
+
         <!-- Image Upload Button -->
         <div class="image-upload-wrapper">
-          <input 
-            type="file" 
-            #imageInput
-            accept="image/*" 
-            (change)="onImageSelected($event)"
-            style="display: none"
-          />
-          <button 
-            type="button"
-            class="image-upload-btn"
-            (click)="imageInput.click()"
-            title="Ajouter une photo"
-          >
+          <input type="file" #imageInput accept="image/*" (change)="onImageSelected($event)" style="display: none" />
+          <button type="button" class="image-upload-btn" (click)="imageInput.click()" title="Add a photo">
             <i class="fas fa-image"></i>
           </button>
         </div>
 
         <button class="create-btn" (click)="publishPost()" [disabled]="!newPostContent.trim()">
-          Publier
+          Post
         </button>
       </div>
 
       <!-- Image Preview -->
       <div *ngIf="postImagePreview" class="image-preview">
-        <img [src]="postImagePreview" alt="Aperçu de l'image" />
-        <button 
-          type="button"
-          class="remove-image-btn"
-          (click)="removeImage()"
-          title="Supprimer l'image"
-        >
+        <img [src]="postImagePreview" alt="Image preview" />
+        <button type="button" class="remove-image-btn" (click)="removeImage()" title="Remove image">
           <i class="fas fa-times"></i>
         </button>
       </div>
     </div>
 
-    <!-- Instagram Feed -->
+    <!-- Feed Scroll -->
     <div class="feed-scroll">
+
       <!-- User Posts -->
       <div *ngFor="let post of posts" class="feed-card user-post-card">
         <!-- Post Header -->
         <div class="post-header">
           <div class="post-user-info">
-            <div class="post-avatar">
-              <img [src]="post.userAvatar" [alt]="post.userName" class="avatar-img">
-            </div>
             <div class="post-user-text">
               <h4>{{ post.userName }}</h4>
-              <p class="post-time">{{ post.timestamp | date:'short' }}</p>
+              <p class="post-time">{{ post.timestamp | date:'shortTime' }}</p>
             </div>
           </div>
           <button class="more-btn">
-            ...
+            <i class="fas fa-ellipsis-h"></i>
           </button>
         </div>
 
         <!-- Post Content -->
         <div class="post-content">
           <p class="post-description">{{ post.content }}</p>
-          <!-- Post Image -->
           <img *ngIf="post.imageUrl" [src]="post.imageUrl" alt="Post image" class="post-image" />
         </div>
 
         <!-- Post Stats -->
         <div class="post-stats">
-          <span>{{ post.likes }} J'aime</span>
-          <span>{{ post.comments }} Commentaires</span>
-          <span>{{ post.shares }} Partages</span>
+          <span>{{ post.likes }} Likes</span>
+          <span>{{ post.comments }} Comments</span>
+          <span>{{ post.shares }} Shares</span>
         </div>
 
         <!-- Post Actions -->
         <div class="post-actions">
           <button class="action-btn" [class.liked]="post.liked" (click)="likePost(post.id)">
-            J'aime
+            Like
           </button>
           <button class="action-btn" (click)="toggleCommentInput(post.id)">
-            Commenter
+            Comment
           </button>
           <button class="action-btn" (click)="sharePost(post.id)">
-            Partager
+            Share
           </button>
         </div>
 
         <!-- Comments Section -->
         <div class="comments-section" *ngIf="post.comments_list.length > 0">
           <div *ngFor="let comment of post.comments_list" class="comment">
-            <img [src]="comment.userAvatar" [alt]="comment.userName" class="comment-avatar">
             <div class="comment-body">
               <h5>{{ comment.userName }}</h5>
               <p>{{ comment.content }}</p>
-              <small>{{ comment.timestamp | date:'short' }}</small>
+              <small>{{ comment.timestamp | date:'shortTime' }}</small>
             </div>
           </div>
         </div>
 
         <!-- Comment Input -->
         <div class="comment-input-section" *ngIf="showCommentInput[post.id]">
-          <input 
-            type="text" 
-            placeholder="Ajouter un commentaire..." 
-            [(ngModel)]="commentText[post.id]"
-            (keyup.enter)="addComment(post.id)"
-            class="comment-input"
-          />
+          <input type="text" placeholder="Add a comment..." [(ngModel)]="commentText[post.id]"
+            (keyup.enter)="addComment(post.id)" class="comment-input" />
           <button (click)="addComment(post.id)" class="comment-btn">
-            Envoyer
+            Send
           </button>
         </div>
       </div>
@@ -134,33 +105,15 @@
         <!-- Job Image/Banner -->
         <div class="job-image-banner" *ngIf="job.imageUrl">
           <img [src]="job.imageUrl" [alt]="job.company" class="job-image">
-          <div class="job-image-overlay">
-            <img [src]="job.logo" [alt]="job.company + ' logo'" class="company-logo">
-          </div>
-        </div>
-
-        <div class="job-image-banner" *ngIf="!job.imageUrl" [style.background]="'linear-gradient(135deg, ' + getJobColor(i) + ' 0%, ' + getJobColor(i + 1) + ' 100%)'">
-          <div class="job-image-overlay">
-            <i class="fas fa-briefcase"></i>
-          </div>
         </div>
 
         <div class="post-header">
           <div class="post-user-info">
-            <div class="post-avatar" *ngIf="job.logo">
-              <img [src]="job.logo" [alt]="job.company" class="logo-img">
-            </div>
-            <div class="post-avatar" *ngIf="!job.logo" [style.background]="'linear-gradient(135deg, ' + getJobColor(i) + ' 0%, ' + getJobColor(i + 1) + ' 100%)'">
-              <i class="fas fa-building"></i>
-            </div>
             <div class="post-user-text">
               <h4>{{ job.company }}</h4>
               <p class="post-time">{{ job.location }}</p>
             </div>
           </div>
-          <button class="more-btn">
-            <i class="fas fa-ellipsis-h"></i>
-          </button>
         </div>
 
         <div class="post-content">
@@ -169,24 +122,9 @@
           <p class="post-description">{{ job.description.substring(0, 150) }}...</p>
         </div>
 
-        <div class="post-stats">
-          <span><i class="fas fa-heart"></i> 243 J'aime</span>
-          <span><i class="fas fa-comments"></i> 12 Commentaires</span>
-          <span><i class="fas fa-share"></i> Partager</span>
-        </div>
-
         <div class="post-actions">
-          <button class="action-btn">
-            <i class="fas fa-heart"></i>
-          </button>
-          <button class="action-btn">
-            <i class="fas fa-comment"></i>
-          </button>
-          <button class="action-btn">
-            <i class="fas fa-share"></i>
-          </button>
-          <a [routerLink]="['/jobs', job.id]" class="action-btn apply-btn details-btn">
-            <i class="fas fa-info-circle"></i> Détails
+          <a [routerLink]="['/jobs', job.id]" class="action-btn outline-btn">
+            More Details
           </a>
         </div>
       </div>
@@ -195,9 +133,6 @@
       <div *ngFor="let conv of conversations" class="feed-card message-card">
         <div class="message-header">
           <div class="message-user">
-            <div class="message-avatar">
-              <i class="fas fa-user-circle"></i>
-            </div>
             <div class="message-text">
               <h4>{{ getOtherParticipantNames(conv.participantNames) }}</h4>
               <p *ngIf="conv.lastMessage" class="message-preview">{{ conv.lastMessage.content.substring(0, 60) }}...</p>
@@ -206,13 +141,14 @@
           <span *ngIf="conv.unreadCount > 0" class="unread-badge">{{ conv.unreadCount }}</span>
         </div>
         <a routerLink="/chat" class="message-action">
-          Voir conversation <i class="fas fa-arrow-right"></i>
+          View Conversation <i class="fas fa-arrow-right"></i>
         </a>
       </div>
 
       <!-- Empty State -->
-      <div class="feed-empty" *ngIf="jobs.length === 0 && conversations.length === 0">
+      <div class="feed-empty" *ngIf="jobs.length === 0 && conversations.length === 0 && posts.length === 0">
         <i class="fas fa-inbox"></i>
-        <p>Aucune publication pour le moment</p>
-        <small>Explorez les emplois recommandés</small>
-</div>
+        <p>Your feed is empty</p>
+        <small>Follow people or apply to jobs to see more</small>
+
+      </div>
