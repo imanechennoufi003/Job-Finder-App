@@ -1,0 +1,145 @@
+<div class="notifications-container">
+  <div class="notifications-header">
+    <h1>Notifications</h1>
+    <div class="header-actions">
+      @if (notificationService.unreadCount() > 0) {
+        <button (click)="markAllAsRead()" class="btn btn-primary" type="button">
+          <i class="fas fa-check"></i>
+          Marquer tout comme lu
+        </button>
+      }
+      @if (filteredNotifications.length > 0) {
+        <button (click)="clearAll()" class="btn btn-danger" type="button">
+          <i class="fas fa-trash"></i>
+          Effacer tout
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- Filter Tabs -->
+  <div class="notifications-filters">
+    <button
+      (click)="setFilter('all')"
+      [class.active]="selectedFilter === 'all'"
+      class="filter-btn"
+      type="button"
+    >
+      <span>Toutes</span>
+      <span class="count">{{ notificationService.getNotifications().length }}</span>
+    </button>
+    <button
+      (click)="setFilter('unread')"
+      [class.active]="selectedFilter === 'unread'"
+      class="filter-btn"
+      type="button"
+    >
+      <span>Non lues</span>
+      <span class="count">{{ notificationService.unreadCount() }}</span>
+    </button>
+    <button
+      (click)="setFilter('like')"
+      [class.active]="selectedFilter === 'like'"
+      class="filter-btn"
+      type="button"
+    >
+      <i class="fas fa-heart"></i>
+      <span>J'aime</span>
+    </button>
+    <button
+      (click)="setFilter('comment')"
+      [class.active]="selectedFilter === 'comment'"
+      class="filter-btn"
+      type="button"
+    >
+      <i class="fas fa-comment"></i>
+      <span>Commentaires</span>
+    </button>
+    <button
+      (click)="setFilter('message')"
+      [class.active]="selectedFilter === 'message'"
+      class="filter-btn"
+      type="button"
+    >
+      <i class="fas fa-envelope"></i>
+      <span>Messages</span>
+    </button>
+    <button
+      (click)="setFilter('share')"
+      [class.active]="selectedFilter === 'share'"
+      class="filter-btn"
+      type="button"
+    >
+      <i class="fas fa-share"></i>
+      <span>Partages</span>
+    </button>
+  </div>
+
+  <!-- Notifications List -->
+  <div class="notifications-list">
+    @if (filteredNotifications.length === 0) {
+      <div class="empty-state">
+        <i class="fas fa-inbox"></i>
+        <h3>Aucune notification</h3>
+        <p>Vous n'avez pas de notification pour l'instant</p>
+      </div>
+    } @else {
+      @for (notification of filteredNotifications; track notification.id) {
+        <div
+          class="notification-card"
+          [class.unread]="!notification.read"
+          [class]="getTypeClass(notification.type)"
+          (click)="markAsRead(notification)"
+        >
+          <div class="notification-main">
+            <!-- Avatar -->
+            @if (notification.avatar) {
+              <img
+                [src]="notification.avatar"
+                [alt]="notification.userName || 'Avatar'"
+                class="notification-avatar"
+              />
+            } @else {
+              <div class="notification-icon">
+                <i class="fas" [class]="getIconClass(notification.type)"></i>
+              </div>
+            }
+
+            <!-- Content -->
+            <div class="notification-content">
+              <h3>{{ notification.title }}</h3>
+              <p>{{ notification.message }}</p>
+              <div class="notification-meta">
+                <span class="time">{{ getTimeAgo(notification.timestamp) }}</span>
+                @if (!notification.read) {
+                  <span class="unread-indicator">Non lu</span>
+                }
+              </div>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="notification-card-actions">
+            @if (notification.actionUrl) {
+              <a
+                [routerLink]="notification.actionUrl"
+                class="action-link"
+                (click)="$event.stopPropagation()"
+              >
+                <i class="fas fa-arrow-right"></i>
+              </a>
+            }
+            <button
+              (click)="deleteNotification(notification.id); $event.stopPropagation()"
+              class="action-btn delete"
+              type="button"
+              title="Supprimer"
+            >
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>
+      }
+    }
+  </div>
+</div>

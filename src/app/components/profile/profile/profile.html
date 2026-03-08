@@ -1,0 +1,181 @@
+<div class="profile-container" *ngIf="profile">
+  <div class="profile-content">
+    <!-- Profile Header -->
+    <div class="profile-header">
+      <div class="background-image"></div>
+      <div class="profile-info-main">
+        <div class="profile-avatar">{{ profile.firstName.charAt(0) }}{{ profile.lastName.charAt(0) }}</div>
+        <div class="profile-header-info">
+          <h1>{{ profile.firstName }} {{ profile.lastName }}</h1>
+          <p class="headline">{{ profile.headline || 'Ajouter un titre professionnel' }}</p>
+          <p class="location">📍 {{ profile.location || 'Localisation non spécifiée' }}</p>
+          <div class="profile-actions" *ngIf="!isOwnProfile">
+            <button class="action-btn">Se connecter</button>
+            <button class="action-btn secondary">Envoyer un message</button>
+          </div>
+        </div>
+        <div class="profile-stats">
+          <div class="stat">
+            <span class="stat-value">{{ profile.connections || 0 }}</span>
+            <span class="stat-label">Connexions</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">{{ profile.followers || 0 }}</span>
+            <span class="stat-label">Abonnés</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">{{ profile.posts || 0 }}</span>
+            <span class="stat-label">Publications</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-grid">
+      <!-- Main Content -->
+      <div class="main-content">
+        <!-- About Section -->
+        <section class="profile-section">
+          <h2>À propos</h2>
+          <p>{{ profile.bio || 'Aucune biographie ajoutée' }}</p>
+        </section>
+
+        <!-- Experience Section -->
+        <section class="profile-section">
+          <div class="section-header">
+            <h2>Expérience</h2>
+            <button *ngIf="isOwnProfile" class="add-btn" (click)="toggleAddExperienceForm()"
+              [class.active]="showAddExperienceForm">
+              <i class="fas fa-plus"></i> Ajouter une expérience
+            </button>
+          </div>
+
+          <!-- Add Experience Form -->
+          <div *ngIf="showAddExperienceForm && isOwnProfile" class="add-experience-form">
+            <form [formGroup]="experienceForm" (ngSubmit)="addExperience()">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Titre du poste *</label>
+                  <input type="text" formControlName="title" placeholder="Ex: Développeur Senior" />
+                </div>
+                <div class="form-group">
+                  <label>Entreprise *</label>
+                  <input type="text" formControlName="company" placeholder="Ex: TechCorp" />
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Localisation *</label>
+                  <input type="text" formControlName="location" placeholder="Ex: Paris, France" />
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Date de début *</label>
+                  <input type="date" formControlName="startDate" />
+                </div>
+                <div class="form-group" *ngIf="!experienceForm.get('isCurrent')?.value">
+                  <label>Date de fin</label>
+                  <input type="date" formControlName="endDate" />
+                </div>
+              </div>
+
+              <div class="form-group checkbox">
+                <input type="checkbox" formControlName="isCurrent" id="isCurrent" />
+                <label for="isCurrent">Je travaille actuellement dans ce rôle</label>
+              </div>
+
+              <div class="form-group">
+                <label>Description</label>
+                <textarea formControlName="description"
+                  placeholder="Décrivez vos responsabilités et accomplissements..." rows="4"></textarea>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="btn-primary" [disabled]="!experienceForm.valid">
+                  Ajouter
+                </button>
+                <button type="button" class="btn-secondary" (click)="toggleAddExperienceForm()">
+                  Annuler
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Experience List -->
+          <div class="experience-list" *ngIf="profile.experience && profile.experience.length > 0">
+            <div *ngFor="let exp of profile.experience; let i = index" class="experience-item">
+              <div class="exp-icon">💼</div>
+              <div class="exp-details">
+                <h3>{{ exp.title }}</h3>
+                <p class="company">{{ exp.company }} • {{ exp.location }}</p>
+                <p class="duration">
+                  {{ exp.startDate | date:'MMM yyyy' }} -
+                  {{ exp.isCurrent ? 'Actuellement' : (exp.endDate | date:'MMM yyyy') }}
+                </p>
+                <p *ngIf="exp.description" class="description">{{ exp.description }}</p>
+              </div>
+              <button *ngIf="isOwnProfile" class="delete-btn" (click)="deleteExperience(i)" title="Supprimer">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </div>
+
+          <div *ngIf="!profile.experience || profile.experience.length === 0" class="empty-state">
+            <p>Aucune expérience ajoutée</p>
+            <p *ngIf="isOwnProfile" class="hint">Cliquez sur "Ajouter une expérience" pour commencer</p>
+          </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section class="profile-section" *ngIf="profile.skills && profile.skills.length > 0">
+          <h2>Compétences</h2>
+          <div class="skills-grid">
+            <div *ngFor="let skill of profile.skills" class="skill-badge">{{ skill }}</div>
+          </div>
+        </section>
+
+        <!-- Education Section -->
+        <section class="profile-section" *ngIf="profile.education && profile.education.length > 0">
+          <h2>Formation</h2>
+          <div class="education-list">
+            <div *ngFor="let edu of profile.education" class="education-item">
+              <div class="edu-icon">🎓</div>
+              <div class="edu-details">
+                <h3>{{ edu.school }}</h3>
+                <p class="degree">{{ edu.degree }} en {{ edu.field }}</p>
+                <p class="duration">
+                  {{ edu.startDate | date:'MMM yyyy' }} -
+                  {{ edu.endDate | date:'MMM yyyy' }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <!-- Website Card -->
+        <div class="sidebar-card" *ngIf="profile.website">
+          <h3>Site web</h3>
+          <a [href]="profile.website" target="_blank" class="website-link">{{ profile.website }}</a>
+        </div>
+
+        <!-- Activity Card -->
+        <div class="sidebar-card">
+          <h3>Activité</h3>
+          <p class="activity-text">Membre depuis 2023</p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+
+<div class="no-profile" *ngIf="!profile">
+  <p>Profil non trouvé</p>
+  <p style="color: #999; font-size: 12px;">Debug: Profile is null or undefined</p>
+  <a routerLink="/dashboard" class="link">Retour à l'accueil</a>
+</div>

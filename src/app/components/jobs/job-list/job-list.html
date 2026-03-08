@@ -1,0 +1,79 @@
+<div class="job-list-container">
+  <div class="jobs-content">
+    <div class="search-section">
+      <div class="search-container">
+        <input type="text" [(ngModel)]="searchQuery" (keyup.enter)="search()"
+          placeholder="Rechercher un emploi, une entreprise..." class="search-input" />
+        <button (click)="search()" class="search-btn">
+          <i class="fas fa-search" style="margin-right: 8px;"></i>Rechercher
+        </button>
+      </div>
+    </div>
+
+    <div class="jobs-grid">
+      <div class="jobs-list">
+        <h2>
+          <i class="fas fa-briefcase" style="color: #6c63ff;"></i>
+          Emplois disponibles ({{ filteredJobs.length }})
+        </h2>
+
+        <div *ngIf="filteredJobs.length === 0" class="no-results">
+          <p>Aucun emploi trouvé</p>
+        </div>
+
+        <div *ngFor="let job of filteredJobs" class="job-card">
+          <div class="job-card-header">
+            <div class="job-company-info">
+              <div class="company-logo">{{ job.company.charAt(0) }}</div>
+              <div>
+                <h3>{{ job.title }}</h3>
+                <p class="company-name">{{ job.company }}</p>
+              </div>
+            </div>
+            <span class="job-type-badge">{{ job.jobType }}</span>
+          </div>
+
+          <div class="job-card-body">
+            <p class="job-location">
+              <i class="fas fa-map-marker-alt icon"></i> {{ job.location }}
+            </p>
+            <p class="job-salary" *ngIf="job.salary">
+              <i class="fas fa-dollar-sign icon"></i> {{ job.salary }}
+            </p>
+            <p class="job-description">{{ job.description }}</p>
+
+            <div class="requirements">
+              <strong>Compétences requises</strong>
+              <div class="tags">
+                <span *ngFor="let req of job.requirements" class="tag">{{ req }}</span>
+              </div>
+            </div>
+
+            <div class="job-stats">
+              <span class="applicants">
+                <i class="fas fa-users" style="color:#6c63ff; margin-right:4px;"></i>
+                {{ job.applicants }} candidats
+              </span>
+              <span class="posted-date">
+                <i class="fas fa-clock" style="color:#8892b0; margin-right:4px;"></i>
+                Publié aujourd'hui
+              </span>
+            </div>
+          </div>
+
+          <div class="job-card-footer">
+            <a [routerLink]="['/jobs', job.id]" class="view-btn">
+              <i class="fas fa-info-circle" style="margin-right: 6px;"></i>Détails
+            </a>
+            <button (click)="applyJob(job.id)" [disabled]="hasApplied(job.id)" class="apply-btn"
+              [class.applied]="hasApplied(job.id)">
+              <i class="fas fa-paper-plane" style="margin-right:6px;" *ngIf="!hasApplied(job.id)"></i>
+              <i class="fas fa-check" style="margin-right:6px;" *ngIf="hasApplied(job.id)"></i>
+              {{ hasApplied(job.id) ? 'Candidature envoyée' : 'Postuler' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

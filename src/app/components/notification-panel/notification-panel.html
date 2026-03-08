@@ -1,0 +1,127 @@
+<div class="notification-container">
+  <!-- Bell Icon Button -->
+  <div class="notification-trigger">
+    <button
+      class="bell-button"
+      (click)="togglePanel()"
+      [class.active]="notificationSvc.showNotificationPanel()"
+      type="button"
+      aria-label="Notifications"
+    >
+      <i class="fas fa-bell"></i>
+      @if (notificationSvc.unreadCount() > 0) {
+        <span class="unread-badge">{{ notificationSvc.unreadCount() }}</span>
+      }
+    </button>
+  </div>
+
+  <!-- Notification Panel -->
+  @if (notificationSvc.showNotificationPanel()) {
+    <div class="notification-panel-overlay" (click)="closePanel()"></div>
+    <div class="notification-panel">
+      <!-- Header -->
+      <div class="notification-header">
+        <h3>Notifications</h3>
+        <button
+          class="close-btn"
+          (click)="closePanel()"
+          type="button"
+          aria-label="Fermer"
+        >
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="notification-toolbar">
+        @if (notificationSvc.unreadCount() > 0) {
+          <button
+            class="toolbar-btn"
+            (click)="markAllAsRead()"
+            title="Marquer tout comme lu"
+            type="button"
+          >
+            <i class="fas fa-check"></i>
+            Marquer tout comme lu
+          </button>
+        }
+        @if (notifications.length > 0) {
+          <button
+            class="toolbar-btn delete-btn"
+            (click)="clearAll()"
+            title="Supprimer tout"
+            type="button"
+          >
+            <i class="fas fa-trash"></i>
+            Effacer tout
+          </button>
+        }
+      </div>
+
+      <!-- Notifications List -->
+      <div class="notification-list">
+        @if (notifications.length === 0) {
+          <div class="empty-state">
+            <i class="fas fa-bell"></i>
+            <p>Aucune notification</p>
+          </div>
+        } @else {
+          @for (notification of notifications; track notification.id) {
+            <div
+              class="notification-item"
+              [class.unread]="!notification.read"
+              [class]="getTypeClass(notification.type)"
+              (click)="markAsRead(notification)"
+            >
+              <div class="notification-content">
+                <!-- Avatar -->
+                @if (notification.avatar) {
+                  <img
+                    [src]="notification.avatar"
+                    [alt]="notification.userName || 'Avatar'"
+                    class="notification-avatar"
+                  />
+                } @else {
+                  <div class="notification-icon">
+                    <i class="fas" [class]="getIconClass(notification.type)"></i>
+                  </div>
+                }
+
+                <!-- Text Content -->
+                <div class="notification-text">
+                  <h4>{{ notification.title }}</h4>
+                  <p>{{ notification.message }}</p>
+                  <span class="notification-time">{{
+                    getTimeAgo(notification.timestamp)
+                  }}</span>
+                </div>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="notification-actions">
+                <button
+                  class="action-btn delete"
+                  (click)="deleteNotification(notification.id); $event.stopPropagation()"
+                  type="button"
+                  title="Supprimer"
+                >
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+          }
+        }
+      </div>
+
+      <!-- Footer -->
+      @if (notifications.length > 0) {
+        <div class="notification-footer">
+          <a routerLink="/notifications" (click)="closePanel()" class="view-all">
+            Voir toutes les notifications
+            <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      }
+    </div>
+  }
+</div>

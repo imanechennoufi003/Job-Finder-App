@@ -1,0 +1,129 @@
+﻿<div class="freedom-layout">
+  <!-- Dynamic Background Image -->
+  <div class="hero-bg" [class.blurred]="showAuthPanel">
+    <img src="assets/login_hero.png" alt="Professional Office Workspace">
+    <div class="hero-overlay"></div>
+  </div>
+
+  <!-- Top Navigation -->
+  <nav class="freedom-nav" [class.fade-out]="showAuthPanel">
+    <div class="nav-logo">
+      <i class="fas fa-briefcase"></i> jobfinder
+    </div>
+    <div class="nav-center">
+      <a href="#" (click)="$event.preventDefault()">Features</a>
+      <a href="#" (click)="$event.preventDefault()">For Employers</a>
+      <a href="#" (click)="$event.preventDefault()">Why Jobfinder</a>
+    </div>
+    <div class="nav-right">
+      <button class="nav-login-btn" (click)="openAuth(false)">
+        <i class="fas fa-user" style="margin-right: 6px;"></i> LOGIN
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero Content -->
+  <div class="hero-content" [class.fade-out]="showAuthPanel">
+    <h1 class="hero-title">
+      Fin<span class="icon-pill white"><i class="fas fa-search"></i></span>d your dream job,<br>
+      unlo<span class="icon-pill green"><i class="fas fa-unlock"></i></span>ck your future.
+    </h1>
+    <button class="hero-cta" (click)="openAuth(true)">
+      START FOR FREE
+      <span class="cta-arrow-circle"><i class="fas fa-arrow-right"></i></span>
+    </button>
+  </div>
+
+  <!-- Authentication Modal -->
+  <div class="auth-modal-overlay" *ngIf="showAuthPanel" (click)="closeAuth()">
+    <div class="auth-modal-content" (click)="$event.stopPropagation()">
+      <button class="close-modal-btn" (click)="closeAuth()">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <!-- Split Panel Auth Layout (Clean Style) -->
+      <div class="auth-split-container" [class.right-panel-active]="isToggled">
+
+        <!-- LOGIN FORM -->
+        <div class="form-container sign-in-container">
+          <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+            <h2>Welcome Back</h2>
+            <p class="subtitle">Enter your credentials to access your account</p>
+
+            <div class="input-group">
+              <i class="fas fa-envelope icon"></i>
+              <input type="email" placeholder="Email Address" formControlName="email" required />
+            </div>
+
+            <div class="input-group">
+              <i class="fas fa-lock icon"></i>
+              <input type="password" placeholder="Password" formControlName="password" required />
+            </div>
+
+            <div *ngIf="error && !isToggled" class="error-msg">{{ error }}</div>
+
+            <button type="submit" class="submit-btn solid" [disabled]="loginForm.invalid">
+              LOG IN
+            </button>
+          </form>
+        </div>
+
+        <!-- SIGNUP FORM -->
+        <div class="form-container sign-up-container">
+          <form [formGroup]="signupForm" (ngSubmit)="onSignup()">
+            <h2>Create Account</h2>
+            <p class="subtitle">Join thousands of professionals today</p>
+
+            <div class="input-row">
+              <div class="input-group">
+                <i class="fas fa-user icon"></i>
+                <input type="text" placeholder="First Name" formControlName="firstName" required />
+              </div>
+              <div class="input-group">
+                <input type="text" placeholder="Last Name" formControlName="lastName" required />
+              </div>
+            </div>
+
+            <div class="input-group">
+              <i class="fas fa-envelope icon"></i>
+              <input type="email" placeholder="Email Address" formControlName="email" required />
+            </div>
+
+            <div class="input-group">
+              <i class="fas fa-lock icon"></i>
+              <input type="password" placeholder="Password" formControlName="password" required />
+            </div>
+
+            <div class="input-group">
+              <i class="fas fa-check-circle icon"></i>
+              <input type="password" placeholder="Confirm Password" formControlName="confirmPassword" required />
+            </div>
+
+            <div *ngIf="error && isToggled" class="error-msg">{{ error }}</div>
+
+            <button type="submit" class="submit-btn solid" [disabled]="signupForm.invalid">
+              SIGN UP
+            </button>
+          </form>
+        </div>
+
+        <!-- OVERLAY PANELS (FOR SWITCHING) -->
+        <div class="overlay-container">
+          <div class="overlay">
+            <div class="overlay-panel overlay-left">
+              <h2>Already standard?</h2>
+              <p>To keep connected with us please login with your personal info</p>
+              <button class="submit-btn outline" (click)="toggleToLogin()">SIGN IN</button>
+            </div>
+            <div class="overlay-panel overlay-right">
+              <h2>New here?</h2>
+              <p>Enter your personal details and start your professional journey with us</p>
+              <button class="submit-btn outline" (click)="toggleToSignup()">SIGN UP</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

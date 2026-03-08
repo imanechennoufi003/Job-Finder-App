@@ -1,0 +1,146 @@
+<div class="job-detail-container" *ngIf="!isLoading && job">
+  <header class="navbar">
+    <div class="navbar-content">
+      <a routerLink="/jobs" class="back-link">← Retour aux emplois</a>
+      <h1 class="logo">Job Finder</h1>
+    </div>
+  </header>
+
+  <div class="detail-content">
+    <!-- Hero Section -->
+    <div class="hero-section">
+      <div class="hero-inner">
+        <div class="company-header">
+          <div class="company-logo-large">{{ job.company.charAt(0) }}</div>
+          <div class="company-info-main">
+            <h1>{{ job.title }}</h1>
+            <p class="company-name">{{ job.company }}</p>
+          </div>
+          <span class="job-type-badge">{{ job.jobType }}</span>
+        </div>
+
+        <!-- Quick Info -->
+        <div class="quick-info">
+          <div class="info-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>{{ job.location }}</span>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-briefcase"></i>
+            <span *ngIf="job.salary">{{ job.salary }}</span>
+            <span *ngIf="!job.salary">Salaire à discuter</span>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-users"></i>
+            <span>{{ job.applicants }} candidats</span>
+          </div>
+          <div class="info-item">
+            <i class="fas fa-clock"></i>
+            <span>Publié aujourd'hui</span>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+          <button class="btn-secondary">
+            <i class="fas fa-info-circle"></i> Détails
+          </button>
+          <button
+            (click)="applyForJob()"
+            [disabled]="hasApplied"
+            class="btn-primary"
+            [class.applied]="hasApplied"
+          >
+            <i class="fas fa-paper-plane"></i> {{ hasApplied ? 'Candidature envoyée' : 'Postuler' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-grid">
+      <!-- Main Content -->
+      <div class="main-content">
+        <!-- Description -->
+        <section class="detail-section">
+          <p class="section-description">{{ job.description }}</p>
+        </section>
+
+        <!-- Skills -->
+        <section class="detail-section">
+          <h2>Compétences requises:</h2>
+          <div class="skills-badges">
+            <span *ngFor="let skill of job.requirements" class="skill-badge">
+              {{ skill }}
+            </span>
+          </div>
+        </section>
+
+        <!-- Info Grid -->
+        <section class="detail-section">
+          <div class="info-grid">
+            <div class="info-card">
+              <label>Type d'emploi</label>
+              <p>{{ job.jobType }}</p>
+            </div>
+            <div class="info-card">
+              <label>Localisation</label>
+              <p>{{ job.location }}</p>
+            </div>
+            <div class="info-card">
+              <label>Salaire</label>
+              <p *ngIf="job.salary" class="salary-highlight">{{ job.salary }}</p>
+              <p *ngIf="!job.salary">À discuter</p>
+            </div>
+            <div class="info-card">
+              <label>Entreprise</label>
+              <p>{{ job.company }}</p>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-card">
+          <h3>À propos de l'entreprise</h3>
+          <div class="company-card-sidebar">
+            <div class="company-logo-sidebar">{{ job.company.charAt(0) }}</div>
+            <p class="company-name-sidebar">{{ job.company }}</p>
+            <p class="company-desc">Une entreprise innovante offrant des opportunités de carrière exceptionnelles dans les technologies.</p>
+            <a href="#" class="view-company-link">
+              Afficher la page <i class="fas fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="sidebar-card">
+          <h3>Statistiques du poste</h3>
+          <div class="stats-list">
+            <div class="stat-row">
+              <span class="stat-label">Candidats</span>
+              <span class="stat-value">{{ job.applicants }}</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Posté</span>
+              <span class="stat-value">Aujourd'hui</span>
+            </div>
+            <div class="stat-row">
+              <span class="stat-label">Niveau</span>
+              <span class="stat-value">Sénior</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+
+<div class="no-job" *ngIf="!isLoading && !job">
+  <p>{{ error || 'Emploi non trouvé' }}</p>
+  <a routerLink="/jobs" class="link">Retour aux emplois</a>
+</div>
+
+<!-- Loading State -->
+<div class="loading-container" *ngIf="isLoading">
+  <div class="spinner"></div>
+  <p>Chargement du poste...</p>

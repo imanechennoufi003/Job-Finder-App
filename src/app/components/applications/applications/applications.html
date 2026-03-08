@@ -1,0 +1,33 @@
+<div class="applications-container">
+  <header class="navbar">
+    <div class="navbar-content">
+      <a routerLink="/dashboard" class="back-link">← Retour</a>
+      <h1 class="logo">Job Finder</h1>
+    </div>
+  </header>
+
+  <div class="applications-content">
+    <h2>Mes candidatures</h2>
+
+    <div *ngIf="applications.length === 0" class="no-applications">
+      <p>Vous n'avez pas encore postulé à des emplois</p>
+      <a routerLink="/jobs" class="link">Parcourir les emplois</a>
+    </div>
+
+    <div *ngIf="applications.length > 0" class="applications-list">
+      <div *ngFor="let app of applications" class="application-item">
+        <div class="application-header">
+          <h3>Candidature à l'emploi #{{ app.jobId }}</h3>
+          <span class="status-badge" [style.backgroundColor]="getStatusColor(app.status)">
+            {{ getStatusLabel(app.status) }}
+          </span>
+        </div>
+        <p class="applied-date">Candidature envoyée le {{ app.appliedDate | date:'dd/MM/yyyy' }}</p>
+        <p *ngIf="app.coverLetter" class="cover-letter">
+          <strong>Lettre de motivation:</strong> {{ app.coverLetter }}
+        </p>
+        <a [routerLink]="['/jobs', app.jobId]" class="view-job-link">Voir l'emploi</a>
+      </div>
+    </div>
+  </div>
+</div>

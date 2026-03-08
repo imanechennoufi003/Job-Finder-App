@@ -1,0 +1,122 @@
+<div class="job-post-container">
+  <header class="navbar">
+    <div class="navbar-content">
+      <a routerLink="/dashboard" class="back-link">← Retour</a>
+      <h1 class="logo">Job Finder</h1>
+    </div>
+  </header>
+
+  <div class="post-content" *ngIf="!submitted">
+    <h2>Créer une annonce d'emploi</h2>
+
+    <form (ngSubmit)="onSubmit()" class="post-form">
+      <div class="form-group">
+        <label for="title">Titre de l'emploi *</label>
+        <input
+          type="text"
+          id="title"
+          [(ngModel)]="formData.title"
+          name="title"
+          class="form-control"
+          placeholder="Ex: Senior Angular Developer"
+          required
+        />
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="company">Entreprise *</label>
+          <input
+            type="text"
+            id="company"
+            [(ngModel)]="formData.company"
+            name="company"
+            class="form-control"
+            placeholder="Nom de l'entreprise"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="location">Localisation *</label>
+          <input
+            type="text"
+            id="location"
+            [(ngModel)]="formData.location"
+            name="location"
+            class="form-control"
+            placeholder="Ville, Région"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="jobType">Type d'emploi *</label>
+          <select
+            id="jobType"
+            [(ngModel)]="formData.jobType"
+            name="jobType"
+            class="form-control"
+            required
+          >
+            <option *ngFor="let type of jobTypes" [value]="type">{{ type }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="salary">Salaire</label>
+          <input
+            type="text"
+            id="salary"
+            [(ngModel)]="formData.salary"
+            name="salary"
+            class="form-control"
+            placeholder="Ex: $120k - $150k"
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Description du poste *</label>
+        <textarea
+          id="description"
+          [(ngModel)]="formData.description"
+          name="description"
+          class="form-control textarea"
+          placeholder="Décrivez le poste, les responsabilités et les attentes..."
+          rows="8"
+          required
+        ></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="requirements">Compétences requises</label>
+        <textarea
+          id="requirements"
+          [(ngModel)]="formData.requirements"
+          name="requirements"
+          class="form-control textarea"
+          placeholder="Entrez les compétences séparées par des virgules (Ex: Angular, TypeScript, RxJS)"
+          rows="4"
+        ></textarea>
+        <small>Séparez les compétences par des virgules</small>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary" [disabled]="submitting">
+          {{ submitting ? 'Publication...' : 'Publier l\'annonce' }}
+        </button>
+        <a routerLink="/jobs" class="btn btn-secondary">Annuler</a>
+      </div>
+    </form>
+  </div>
+
+  <div class="success-message" *ngIf="submitted">
+    <div class="success-card">
+      <h2>Annonce créée avec succès! ✓</h2>
+      <p>Redirection vers l'annonce dans quelques secondes...</p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,19 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: linear-gradient(160deg, var(--bg-base) 0%, var(--bg-surface) 100%);
+  font-family: var(--font-primary);
+  color: var(--text-primary);
+}
+
+.app-main {
+  flex: 1;
+  padding: 28px 20px;
+}
+
+@media (max-width: 768px) {
+  .app-main {
+    padding: 16px 12px;
+  }
+}

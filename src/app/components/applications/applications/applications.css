@@ -1,0 +1,163 @@
+.applications-container {
+  min-height: 100vh;
+  background-color: #f3f2f0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+}
+
+.navbar {
+  background-color: white;
+  border-bottom: 1px solid #e5e5e5;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 60px;
+}
+
+.back-link {
+  color: #0a66c2;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s;
+}
+
+.back-link:hover {
+  color: #084b97;
+}
+
+.logo {
+  color: #0a66c2;
+  font-size: 28px;
+  margin: 0;
+  font-weight: bold;
+  flex: 1;
+  text-align: center;
+}
+
+.applications-content {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 30px 20px;
+}
+
+.applications-content h2 {
+  margin: 0 0 20px 0;
+  color: #333;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.no-applications {
+  text-align: center;
+  padding: 60px 20px;
+  background-color: white;
+  border-radius: 8px;
+  color: #999;
+}
+
+.no-applications p {
+  margin: 0 0 20px 0;
+  font-size: 16px;
+}
+
+.link {
+  display: inline-block;
+  color: #0a66c2;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 10px 20px;
+  border: 1px solid #0a66c2;
+  border-radius: 20px;
+  transition: all 0.3s;
+}
+
+.link:hover {
+  background-color: #e8f3ff;
+}
+
+.applications-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.application-item {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-left: 4px solid #0a66c2;
+  transition: all 0.3s;
+}
+
+.application-item:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.application-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 12px;
+}
+
+.application-header h3 {
+  margin: 0;
+  color: #0a66c2;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.applied-date {
+  margin: 0 0 12px 0;
+  color: #999;
+  font-size: 13px;
+}
+
+.cover-letter {
+  margin: 12px 0;
+  color: #666;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.view-job-link {
+  display: inline-block;
+  color: #0a66c2;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  margin-top: 12px;
+}
+
+.view-job-link:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .application-header {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .applications-content {
+    padding: 20px;
+  }
+}
