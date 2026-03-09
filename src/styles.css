@@ -8,7 +8,7 @@
 /* --- CSS Variables (Design Tokens) --- */
 :root {
   /* Colors - Light Theme based on Freedom */
-  --bg-primary: #87877d;
+  --bg-primary: #6d6d65;
   /* Off-white warm background */
   --bg-secondary: #f6f1f1;
   --bg-tertiary: #f3f4f6;
@@ -30,7 +30,6 @@
   --border-light: rgba(31, 41, 55, 0.1);
   --border-strong: rgba(31, 41, 55, 0.2);
 
-  /* Typography */
   --font-family-sans: 'Inter', sans-serif;
   --font-family-serif: 'Fraunces', serif;
 
